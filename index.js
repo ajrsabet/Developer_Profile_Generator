@@ -1,10 +1,12 @@
-const inquirer = require("inquirer");
-const fs = require("fs");
-const util = require("util");
-const axios = require("axios");
+const inquirer = require('inquirer');
+const fs = require('fs');
+const util = require('util');
+const axios = require('axios');
+const pdf = require('html-pdf');
+
 
 const writeFileAsync = util.promisify(fs.writeFile);
-const geoLocKey = "AIzaSyCz-3UyaGsNnEDYqgwjByEofuVmaWSuoFs";
+const geoLocKey = 'AIzaSyCz-3UyaGsNnEDYqgwjByEofuVmaWSuoFs';
 
 
 ////////////////// Main Function ///////////////////////
@@ -24,9 +26,9 @@ async function main() {
     console.log(githubData);
     
     const html = await generateHTML(userInput, githubData);
-    writeFileAsync("index.html", html, "utf8");
-    
-    // const pdf = await pdfGen(html);
+    writeFileAsync('index.html', html, 'utf8');
+        
+    const pdf = await pdfGen(html, userInput);
   
   } catch (err) {
     console.log(err);
@@ -37,52 +39,49 @@ async function main() {
 
 
 ////////////// Write HTML to PDF /////////////////
-// const ElectronPDF = require('electron-pdf');
-// // const express = require('express');
-// // const bodyParser = require('body-parser');
-// // const app = express();
-// // app.use(bodyParser.json());
- 
-// const exporter = new ElectronPDF();
-// exporter.on('charged', () => {
-//     //Only start the express server once the exporter is ready
-//     app.listen(port, hostname, function() {
-//         console.log(`Export Server running at http://${hostname}:${port}`);
-//     })
-// })
-// exporter.start();
+async function pdfGen(html) {
+  
+  // const html = fs.readFileSync('./index.html', 'utf8');
+  const options = { format: 'tabloid', orientation: 'portrait',};
+   
+  pdf.create(html, options).toFile('./profile.pdf', function(err, res) {
+    if (err) return console.log(err);
+    console.log(res); // { filename: '/app/businesscard.pdf' }
+  });
+}
+
 
 
 
 ////////////////// Prompt User ///////////////////////
 async function promptUser() {
   try {
-   const responses = await inquirer.prompt([
-    {
-      type: "input",
-      name: "name",
-      message: "What is your first and last name?",
-    },
-    {
-      type: "input",
-      message: "What is your GitHub username?",
-      name: "username",
-    },
-    {
-      type: "input",
-      message: "What company do you currently work for?",
-      name: "company",
-    },
-    {
-      type: "input",
-      name: "color",
-      message: "What is your favorite color?",
-    },
-  ])
-return responses;
+//    const responses = await inquirer.prompt([
+//     {
+//       name: 'name',
+//       type: 'input',
+//       message: 'What is your first and last name?',
+//     },
+//     {
+//       name: 'username',
+//       type: 'input',
+//       message: 'What is your GitHub username?',
+//     },
+//     {
+//       name: 'company',
+//       type: 'input',
+//       message: 'What company do you currently work for?',
+//     },
+//     {
+//       name: 'color',
+//       type: 'input',
+//       message: 'What is your favorite color?',
+//     },
+//   ])
+// return responses;
 
 // bypass user prompt: Comment out above and uncomment line below
-// return {name:"Adam Sabet",username:"ajrsabet",company: "TransArc Design",color:"orange",};
+return {name:'Adam Sabet',username:'ajrsabet',company: 'TransArc Design',color:'blue',};
   
 } catch (err) {
     console.log(err);
@@ -127,17 +126,35 @@ async function generateHTML(userInput, githubData) {
 			width: 90%; 
 			margin: 25px auto;
     }
+    .jumbotron {
+      border-style: solid;
+      border-color: orange;
+      padding: 30px;
+    }
+    img {
+      margin: 30px auto;
+      border-style: solid;
+      border-color: orange;
+      border-width: 5px;
+      border-radius: 100px;
+    }
 </style>
 <body>
   <div class="container">
     <div class="jumbotron">
-    <h1 class="display-4">Developer Profile</h1>
+    <h1 class="display-4">${userInput.name}'s Developer Profile</h1>
+    <hr>
       <div class="row">
-        <div class="col-9">
+        <div class="col-6">
           <img src="${githubData.pic}" alt="">
-          <h1 class="display-4">Hello! My name is ${userInput.name}!</h1>
-          <p class="lead">I currently work for ${userInput.company}</p>
-          <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
+        </div>
+        <div class="col-3" style="padding: 30px 0;">
+        <h3>Company:</h3>
+        <h5>${userInput.company}</h5>
+        <br> 
+        <h3>Location:</h3>
+        <h5></h5>
+                  
         </div>
         <div class="col-3">
           <div class="card">
