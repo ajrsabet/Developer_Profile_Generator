@@ -42,11 +42,11 @@ async function main() {
 async function pdfGen(html) {
   
   // const html = fs.readFileSync('./index.html', 'utf8');
-  const options = { format: 'tabloid', orientation: 'portrait',};
+  const options = { 'format': 'Letter', 'orientation': 'Landscape',};
    
   pdf.create(html, options).toFile('./profile.pdf', function(err, res) {
     if (err) return console.log(err);
-    console.log(res); // { filename: '/app/businesscard.pdf' }
+    console.log(res); // { filename: '/profile.pdf' }
   });
 }
 
@@ -56,32 +56,32 @@ async function pdfGen(html) {
 ////////////////// Prompt User ///////////////////////
 async function promptUser() {
   try {
-//    const responses = await inquirer.prompt([
-//     {
-//       name: 'name',
-//       type: 'input',
-//       message: 'What is your first and last name?',
-//     },
-//     {
-//       name: 'username',
-//       type: 'input',
-//       message: 'What is your GitHub username?',
-//     },
-//     {
-//       name: 'company',
-//       type: 'input',
-//       message: 'What company do you currently work for?',
-//     },
-//     {
-//       name: 'color',
-//       type: 'input',
-//       message: 'What is your favorite color?',
-//     },
-//   ])
-// return responses;
+   const responses = await inquirer.prompt([
+    {
+      name: 'name',
+      type: 'input',
+      message: 'What is your first and last name?',
+    },
+    {
+      name: 'username',
+      type: 'input',
+      message: 'What is your GitHub username?',
+    },
+    {
+      name: 'company',
+      type: 'input',
+      message: 'What company do you currently work for?',
+    },
+    {
+      name: 'color',
+      type: 'input',
+      message: 'What is your favorite color?',
+    },
+  ])
+return responses;
 
 // bypass user prompt: Comment out above and uncomment line below
-return {name:'Adam Sabet',username:'ajrsabet',company: 'TransArc Design',color:'blue',};
+// return {name:'Adam Sabet',username:'ajrsabet',company: 'TransArc Design',color:'blue',};
   
 } catch (err) {
     console.log(err);
@@ -128,15 +128,17 @@ async function generateHTML(userInput, githubData) {
     }
     .jumbotron {
       border-style: solid;
-      border-color: orange;
+      border-color: ${userInput.color};
       padding: 30px;
+      width: 1000px;
     }
     img {
       margin: 30px auto;
       border-style: solid;
-      border-color: orange;
+      border-color: ${userInput.color};
       border-width: 5px;
       border-radius: 100px;
+      width: 90%
     }
 </style>
 <body>
