@@ -6,7 +6,7 @@ const pdf = require('html-pdf');
 
 
 const writeFileAsync = util.promisify(fs.writeFile);
-const geoLocKey = 'AIzaSyCz-3UyaGsNnEDYqgwjByEofuVmaWSuoFs';
+// const geoLocKey = 'AIzaSyCz-3UyaGsNnEDYqgwjByEofuVmaWSuoFs';
 
 
 ////////////////// Main Function ///////////////////////
@@ -22,6 +22,8 @@ async function main() {
       repos: res.data.public_repos,
       followers: res.data.followers,
       following: res.data.following,
+      location: res.data.location,
+      company: res.data.company,
     };
     console.log(githubData);
     
@@ -42,7 +44,7 @@ async function main() {
 async function pdfGen(html) {
   
   // const html = fs.readFileSync('./index.html', 'utf8');
-  const options = { 'format': 'Letter', 'orientation': 'Landscape',};
+  const options = { format: 'Letter', orientation: 'Landscape', };
    
   pdf.create(html, options).toFile('./profile.pdf', function(err, res) {
     if (err) return console.log(err);
@@ -56,32 +58,32 @@ async function pdfGen(html) {
 ////////////////// Prompt User ///////////////////////
 async function promptUser() {
   try {
-   const responses = await inquirer.prompt([
-    {
-      name: 'name',
-      type: 'input',
-      message: 'What is your first and last name?',
-    },
-    {
-      name: 'username',
-      type: 'input',
-      message: 'What is your GitHub username?',
-    },
-    {
-      name: 'company',
-      type: 'input',
-      message: 'What company do you currently work for?',
-    },
-    {
-      name: 'color',
-      type: 'input',
-      message: 'What is your favorite color?',
-    },
-  ])
-return responses;
+  //  const responses = await inquirer.prompt([
+  //   {
+  //     name: 'name',
+  //     type: 'input',
+  //     message: 'What is your first and last name?',
+  //   },
+  //   {
+  //     name: 'username',
+  //     type: 'input',
+  //     message: 'What is your GitHub username?',
+  //   },
+  //   {
+  //     name: 'company',
+  //     type: 'input',
+  //     message: 'What company do you currently work for?',
+  //   },
+  //   {
+  //     name: 'color',
+  //     type: 'input',
+  //     message: 'What is your favorite color?',
+  //   },
+  // ])
+// return responses;
 
 // bypass user prompt: Comment out above and uncomment line below
-// return {name:'Adam Sabet',username:'ajrsabet',company: 'TransArc Design',color:'blue',};
+return {name:'Adam Sabet',username:'ajrsabet',company: 'TransArc Design',color:'orange',};
   
 } catch (err) {
     console.log(err);
@@ -103,7 +105,7 @@ function githubAxiosProfile(username) {
 //     console.log(res.data);
 //   })
 //   .catch(err => {
-//     // console.log(err)                     //Axios entire error message
+//     console.log(err)                     //Axios entire error message
 //     console.log(err.response.data.error) //Google API error message 
 //   });
 
@@ -130,7 +132,6 @@ async function generateHTML(userInput, githubData) {
       border-style: solid;
       border-color: ${userInput.color};
       padding: 30px;
-      width: 1000px;
     }
     img {
       margin: 30px auto;
@@ -155,7 +156,10 @@ async function generateHTML(userInput, githubData) {
         <h5>${userInput.company}</h5>
         <br> 
         <h3>Location:</h3>
-        <h5></h5>
+        <h5><a href="https://www.google.com/maps/place/${githubData.location}/">${githubData.location}</a></h5>
+        <br> 
+        <h3>Company:</h3>
+        <h5>${githubData.company}</h5>
                   
         </div>
         <div class="col-3">
@@ -199,7 +203,6 @@ async function generateHTML(userInput, githubData) {
 </body>
 </html>`
 return html;
-  //   writeFileAsync("index.html", html, "utf8")
   } catch (err) {
     console.log(err);
   }
