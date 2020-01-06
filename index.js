@@ -58,32 +58,32 @@ async function pdfGen(html) {
 ////////////////// Prompt User ///////////////////////
 async function promptUser() {
   try {
-  //  const responses = await inquirer.prompt([
-  //   {
-  //     name: 'name',
-  //     type: 'input',
-  //     message: 'What is your first and last name?',
-  //   },
-  //   {
-  //     name: 'username',
-  //     type: 'input',
-  //     message: 'What is your GitHub username?',
-  //   },
-  //   {
-  //     name: 'company',
-  //     type: 'input',
-  //     message: 'What company do you currently work for?',
-  //   },
-  //   {
-  //     name: 'color',
-  //     type: 'input',
-  //     message: 'What is your favorite color?',
-  //   },
-  // ])
-// return responses;
+   const responses = await inquirer.prompt([
+    {
+      name: 'name',
+      type: 'input',
+      message: 'What is your first and last name?',
+    },
+    {
+      name: 'username',
+      type: 'input',
+      message: 'What is your GitHub username?',
+    },
+    {
+      name: 'company',
+      type: 'input',
+      message: 'What company do you currently work for?',
+    },
+    {
+      name: 'color',
+      type: 'input',
+      message: 'What is your favorite color?',
+    },
+  ])
+return responses;
 
 // bypass user prompt: Comment out above and uncomment line below
-return {name:'Adam Sabet',username:'ajrsabet',company: 'TransArc Design',color:'orange',};
+// return {name:'Adam Sabet',username:'ajrsabet',company: 'TransArc Design',color:'orange',};
   
 } catch (err) {
     console.log(err);
