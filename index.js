@@ -98,18 +98,6 @@ function githubAxiosProfile(username) {
 }
 
 
-////////////////// Geolocation ///////////////////////
-// axios
-//   .get(`https://www.googleapis.com/geolocation/v1/geolocate?key=${geoLocKey}`)
-//   .then(function(res) {
-//     console.log(res.data);
-//   })
-//   .catch(err => {
-//     console.log(err)                     //Axios entire error message
-//     console.log(err.response.data.error) //Google API error message 
-//   });
-
-
 ////////////////// Write HTML ///////////////////////  
 async function generateHTML(userInput, githubData) {
   try {    const html = 
